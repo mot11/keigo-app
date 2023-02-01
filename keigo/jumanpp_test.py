@@ -45,14 +45,20 @@ def keigo_pipe(sentence: MList):
             new_sent.append(jodoushi_process(sentence, index, morpheme))
         elif morpheme.hinsi in ['接尾辞', '動詞性接尾辞','判定詞']:
             new_sent.append(setsubiji_process(sentence, index, morpheme))
+        elif morpheme.hinsi in ['形容詞']:
+            new_sent.append(keiyoushi_process(sentence, index, morpheme))
+        elif morpheme.hinsi in ['副詞']:
+            new_sent.append(fukushi_process(sentence, index, morpheme))
         else:
             new_sent.append(morpheme.midasi)
 
     return new_sent
 
 def meishi_process(sentence, index, word: Morpheme) -> str:
-    out_str = ''
     out_str = word.midasi
+    if index + 1 < len(sentence) and sentence[index + 1].bunrui == '句点':
+        out_str = word.midasi + 'です'
+
     return out_str
 
 def doushi_process(sentence, index, word: Morpheme) -> str:
@@ -83,6 +89,18 @@ def setsubiji_process(sentence, index, word: Morpheme) -> str:
 
     return out_str
 
+def keiyoushi_process(sentence, index, word: Morpheme) -> str:
+    out_str = word.midasi
+    if word.midasi[-1] == 'だ':
+        out_str = word.midasi[:-1] + 'です'
+    return out_str
+
+def fukushi_process(sentence, index, word: Morpheme) -> str:
+    out_str = word.midasi
+    if word.midasi == 'よろしく':
+        out_str = 'よろしくお願いします'
+    return out_str
+
 test_juman = juman_parse("私は彼と一緒に本を読んだ。")
 test_knp = knp_parse("私は彼と一緒に本を読んだ。")
 
@@ -95,8 +113,21 @@ test_knp = knp_parse("私は彼と一緒に本を読んだ。")
 #
 # keigo_sent = keigo_pipe(juman_parse("田中さんにあげました。"))
 # print(keigo_sent)
+#
+# orig_sent = "ドアの鍵をかける。"
+# print('Input:', orig_sent)
+#
+# keigo_sent = keigo_pipe(juman_parse(orig_sent))
+# print('Keigo:', ''.join(keigo_sent), '(', keigo_sent, ')')
 
-orig_sent = "ドアの鍵をかける。"
+orig_sent = "こんにちは。私の名前はジョン。運転が好きだ。これからよろしく。"
+print('Input:', orig_sent)
+
+keigo_sent = keigo_pipe(juman_parse(orig_sent))
+print('Keigo:', ''.join(keigo_sent), '(', keigo_sent, ')')
+
+
+orig_sent = "昨日は晴れていたけど今日は雨が降っている。"
 print('Input:', orig_sent)
 
 keigo_sent = keigo_pipe(juman_parse(orig_sent))
