@@ -98,8 +98,25 @@ df_emails_list = new_df_emails_list
 
 [[print(s['Line'] + '\n- ' + s['Inf']) for s in email_lines] for email_lines in df_emails_list]
 
-# save to pickle
+# remove title brackets
+for email_lines in df_emails_list:
+    for line_dict in email_lines:
+        line_dict['Line'] = line_dict['Line'].replace('[', '')
+        line_dict['Line'] = line_dict['Line'].replace(']', '')
+        line_dict['Inf'] = line_dict['Inf'].replace('[', '')
+        line_dict['Inf'] = line_dict['Inf'].replace(']', '')
 
+# reorganize lines
+
+all_emails = []
+for email_lines in df_emails_list:
+    email_dict = {'Task ID': email_lines[0]['Task ID'], 'Form': [], 'Inf': []}
+    for line_dict in email_lines:
+        email_dict['Form'].append(line_dict['Line'])
+        email_dict['Inf'].append(line_dict['Inf'])
+    all_emails.append(email_dict)
+
+# save to pickle
 if pickle_output_path != '':
     pkl_path = Path(pickle_output_path)
     if pkl_path.exists():
@@ -107,4 +124,4 @@ if pickle_output_path != '':
     else:
         print("Saving pickle...")
         with open(pickle_output_path, 'wb') as f:
-            pickle.dump(df_emails_list, f)
+            pickle.dump(all_emails, f)
