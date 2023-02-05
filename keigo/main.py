@@ -1,16 +1,27 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from subprocess import run, PIPE
+import Mykytea
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def main():
+
+    test_lines = ['半分に切った。', '明日も晴れるだろう。', '私の名前は田中だ。']
+    kytea_test_lines = []
+    new_test_lines = []
+    mk = Mykytea.Mykytea("")
+    for line in test_lines:
+        kytea_tokenized = mk.getTagsToString(line)
+        kytea_test_lines.append(' '.join(mk.getWS(line)))
+        p = run(['python', '../japanese-verb-conjugator/conjugator.py', '-f', 'polite'], stdout=PIPE, input=kytea_tokenized, encoding='utf-8')
+        new_line = p.stdout
+
+        new_test_lines.append(new_line.strip())
+
+    print(test_lines)
+    print(kytea_test_lines)
+    print(new_test_lines)
 
 
-# Press the green button in the gutter to run the script.
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    main()
