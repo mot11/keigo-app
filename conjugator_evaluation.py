@@ -25,6 +25,30 @@ def eval_conjugator():
 
 
     for email_dict in all_emails:
+        print('='*20)
+        [print(line) for line in email_dict['Form']]
+        print('-' * 20)
+        [print(line) for line in email_dict['Inf']]
+        print('=' * 20)
+
+    task_emails_count = {0: {}, 1: {}, 2: {}}
+    for key, value in task_emails_count.items():
+        value['emails'] = 0
+        value['lines'] = 0
+        value['form_length'] = 0
+        value['inf_length'] = 0
+
+    for email_dict in all_emails:
+        task_emails_count[email_dict['Task ID']]['emails'] += 1
+        task_emails_count[email_dict['Task ID']]['lines'] += len(email_dict['Form'])
+        task_emails_count[email_dict['Task ID']]['form_length'] += sum([len(x) for x in email_dict['Form']])
+        task_emails_count[email_dict['Task ID']]['inf_length'] += sum([len(x) for x in email_dict['Inf']])
+
+
+    print(task_emails_count)
+
+
+    for email_dict in all_emails:
         if 'GPT_pred_kyt' not in email_dict:
             email_dict['GPT_pred_kyt'] = []
             email_dict['GPT_pred_kyt_ignore_short_long'] = []
