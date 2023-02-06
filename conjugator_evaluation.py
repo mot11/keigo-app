@@ -24,12 +24,6 @@ def eval_conjugator():
     sacrebleu = evaluate.load("sacrebleu")
 
 
-    for email_dict in all_emails:
-        print('='*20)
-        [print(line) for line in email_dict['Form']]
-        print('-' * 20)
-        [print(line) for line in email_dict['Inf']]
-        print('=' * 20)
 
     task_emails_count = {0: {}, 1: {}, 2: {}}
     for key, value in task_emails_count.items():
@@ -73,6 +67,22 @@ def eval_conjugator():
             results = sacrebleu.compute(predictions=pred_sent, references=gold_sent, tokenize='none')
             print(task_no, conj_type, results)
 
+
+    for email_dict in all_emails:
+        print('='*20)
+        [print(line) for line in email_dict['Form']]
+        print('-' * 20)
+        [print(line) for line in email_dict['Inf']]
+        print('-' * 20)
+        [print(line) for line in email_dict['Conjugator_formal_pred']]
+
+        print('-' * 20)
+        [print(line) for line in email_dict['GPT_pred']]
+
+
+        print('-' * 20)
+        [print(line) for line in email_dict['GPT_pred_kyt_ignore_short_long']]
+        print('=' * 20)
 
 
 def dump_all(all_emails, gold, pred, task):
