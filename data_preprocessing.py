@@ -3,8 +3,8 @@ import unicodedata
 import pickle
 from pathlib import Path
 
-excel_input_path = '../data/data_for_annotation.xlsx'
-pickle_output_path = '../data/annotated_preprocessed.pkl'
+excel_input_path = 'data/data_for_annotation.xlsx'
+pickle_output_path = 'data/annotated_preprocessed.pkl'
 
 # read excel and convert to list of dictionaries
 df = pd.read_excel(excel_input_path)
